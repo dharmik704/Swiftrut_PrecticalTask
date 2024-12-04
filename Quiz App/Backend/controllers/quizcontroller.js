@@ -1,5 +1,4 @@
 const Quiz = require('../models/quiz.model');
-const User = require('../models/user.model');
 const moment = require('moment');
 
 module.exports.createquiz = async (req, res) => {
@@ -41,7 +40,7 @@ module.exports.getquizbyid = async (req, res) => {
             return res.status(200).json({ msg: 'Your Quiz', status: 1, response: 'success', Quiz: quiz });
         }
         else{
-            return res.status(400).json({ msg: 'Quiz not found!!', status: 0, response: 'error' });
+            return res.status(400).json({ msg: 'Quiz is not found!!', status: 0, response: 'error' });
         }
     }
     catch (err) {
@@ -64,7 +63,7 @@ module.exports.updatequiz = async (req, res) => {
             }
         }
         else{
-            return res.status(400).json({ msg: 'Quiz not found!!', status: 0, response: 'error' });
+            return res.status(400).json({ msg: 'Quiz is not found!!', status: 0, response: 'error' });
         }
     }
     catch (err) {
@@ -86,7 +85,7 @@ module.exports.removequiz = async (req, res) => {
             }
         }
         else{
-            return res.status(400).json({ msg: 'Quiz not found!!', status: 0, response: 'error' });
+            return res.status(400).json({ msg: 'Quiz is not found!!', status: 0, response: 'error' });
         }
     }
     catch (err) {
