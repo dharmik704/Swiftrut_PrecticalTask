@@ -67,7 +67,7 @@ module.exports.login = async (req, res) => {
             if (comparepass) {
                 const token = generateToken(payload);
                 res.cookie('admindata-jwt', token);
-                return res.status(200).json({ msg: 'Login Successfully', status: 1, response: 'success', Admindata: checkemail });
+                return res.status(200).json({ msg: 'Login successfully', status: 1, response: 'success', Admindata: checkemail });
             }
             else {
                 return res.status(400).json({ msg: 'Password is not valid', status: 0, response: 'error' });
