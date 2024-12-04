@@ -72,7 +72,7 @@ module.exports.login = async (req, res) => {
             }
         }
         else {
-            return res.status(400).json({ msg: 'Email is not valid', status: 0, response: 'error' });
+            return res.status(400).json({ msg: 'Email is not valid, please check email!!', status: 0, response: 'error' });
         }
     }
     catch (err) {
