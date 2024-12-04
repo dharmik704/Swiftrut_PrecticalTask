@@ -1,5 +1,4 @@
 const Recipe = require('../models/recipe.model');
-const User = require('../models/user.model');
 const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
@@ -16,7 +15,7 @@ module.exports.createrecipe = async (req, res) => {
             req.body.userId = userId;
             const createrecipe = await Recipe.create(req.body);
             if(createrecipe){
-                return res.status(200).json({ msg: 'Recipe created successfully', status: 1, response: 'success', YourPost: createrecipe });
+                return res.status(200).json({ msg: 'Recipe is created successfully', status: 1, response: 'success', YourPost: createrecipe });
             }
             else{
                 return res.status(400).json({ msg: 'Recipe is not created!!', status: 0, response: 'error' });
@@ -54,7 +53,7 @@ module.exports.updaterecipe = async (req, res) => {
             const recipedata = await Recipe.findById(req.params.id);
             var imgpath = path.join(__dirname,'..',recipedata.image);
             if(fs.existsSync(imgpath)){
-                fs.unlinkSync(imgpath);
+                fs.unlinkSync(imgpath); //delete image
             }
             req.body.image = Recipe.ipath + '/' + req.file.filename;
             req.body.updateAt = moment().format('LLL');
