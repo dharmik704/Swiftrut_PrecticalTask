@@ -8,6 +8,8 @@ routes.post('/signup', userctrl.signup);
 routes.post('/login', userctrl.login);
 routes.post('/logout', userctrl.logout);
 
+routes.use('/property', jwtAuthMiddleware, require('./property'));
+
 routes.post('/bookproperty', jwtAuthMiddleware, userctrl.bookproperty);
 routes.get('/getbookproperty', jwtAuthMiddleware, userctrl.getbookedproperty);
 

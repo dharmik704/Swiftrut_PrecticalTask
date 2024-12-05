@@ -1,6 +1,7 @@
-const { timeStamp } = require('console');
 const mongoose = require('mongoose');
-const { type } = require('os');
+const imgpath = '/uploads/homeimg'
+const path = require('path');
+const multer = require('multer');
 
 const propertySchema = mongoose.Schema({
 	title: {
@@ -24,28 +25,35 @@ const propertySchema = mongoose.Schema({
 		required: true,
     },
     price: {
-        org: {
-            type: Number,
-		    required: true,
-        },
-        mrp: {
-            type: Number,
-		    required: true,
-        },
-        off: {
-            type: Number,
-		    required: false,
-            default: 0,
-        }
+        type: Number,
+		required: true,
     },
-    userId: {
+    ownerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
-},
-{timeStamp: true},
-);
+    createAt: {
+		type: String,
+		required: true,
+	},
+    updateAt: {
+		type: String,
+		required: true,
+	},
+});
+
+const imgdata = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null,path.join(__dirname, '..', imgpath));
+	},
+	filename: (req, file, cb) => {
+		cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+	}
+});
+
+propertySchema.statics.uploadimage = multer({storage: imgdata}).single('image');
+propertySchema.statics.ipath = imgpath;
 
 const Property = mongoose.model("Properties", propertySchema);
 
