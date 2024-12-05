@@ -35,7 +35,7 @@ module.exports.bookproperty = async (req, res) => {
 
 module.exports.getbookedproperty = async (req, res) => {
     try {
-        const bookproperty = await Booking.find({userId: req.user._id}).sort({_id: -1}).populate('propertyId');
+        const bookproperty = await Booking.find({userId: req.user._id, status: 'Confirmed'}).sort({_id: -1}).populate('propertyId');
         if(bookproperty){
             return res.status(200).json({ msg: 'Your booked Properties', status: 1, response: 'success', BookedProperty: bookproperty });
         }
@@ -49,7 +49,7 @@ module.exports.getbookedproperty = async (req, res) => {
     }
 }
 
-module.exports.canclebooking= async (req, res) => {
+module.exports.cancelebooking= async (req, res) => {
     try {
         const bookproperty = await Booking.findById(req.params.id);
         if(bookproperty){
@@ -64,6 +64,22 @@ module.exports.canclebooking= async (req, res) => {
         }
         else{
             return res.status(400).json({ msg: 'Booking not found!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
+module.exports.getcancelebooking = async (req, res) => {
+    try {
+        const booking = await Booking.find({userId: req.user._id, status: 'Canceled'}).populate('propertyId');
+        if(booking){
+            return res.status(200).json({ msg: 'Your canceled bookings', status: 1, response: 'success', CanceleBookings: booking });
+        }
+        else{
+            return res.status(400).json({ msg: 'Canceled bookings are not founds!!', status: 0, response: 'error' });
         }
     }
     catch (err) {
