@@ -53,7 +53,7 @@ module.exports.getyourproperties = async (req, res) => {
             return res.status(400).json({ msg: 'Properties are not founds!!', status: 0, response: 'error' });
         }
         if(userproperty){
-            return res.status(200).json({ msg: 'Your all Properties', status: 1, response: 'success', AllPropertes: userproperty });
+            return res.status(200).json({ msg: 'Your all Properties', status: 1, response: 'success', YourPropertes: userproperty });
         }
         else{
             return res.status(400).json({ msg: 'Properties are not founds!!', status: 0, response: 'error' });

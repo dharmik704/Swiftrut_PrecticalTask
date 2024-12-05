@@ -3,7 +3,7 @@ const bookingctrl = require('../controllers/bookingcontroller');
 
 const routes = express.Router();
 
-routes.post('/bookproperty', bookingctrl.bookproperty);
+routes.post('/bookproperty/:id', bookingctrl.bookproperty);
 // routes.get('/getbookproperty', bookingctrl.getbookedproperty);
 
 module.exports = routes;
