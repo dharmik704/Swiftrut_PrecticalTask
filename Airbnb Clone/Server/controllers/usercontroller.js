@@ -93,37 +93,6 @@ module.exports.logout = async (req, res) => {
     }
 }
 
-module.exports.bookproperty = async (req, res) => {
-    try {
-        const userId = req.user._id;
-        const { propertyId } = req.body;
-
-        const user = await User.findById(userId);
-        if(!user){
-            return res.status(400).json({ msg: 'User Not Found', status: 0, response: 'error' });
-        }
-
-        if(!user.bookings){
-            // user.bookings.(propertyId);
-            const savdata = await user.save({bookings: propertyId});
-            console.log(savdata);
-            return res.status(200).json({ msg: 'Property Booked', status: 1, response: 'success' });
-        }
-
-        const property = await Property.findById(propertyId);
-        if(property){
-            return res.status(200).json({ msg: 'Bokked Properties', status: 1, response: 'success', BookProperties: property });
-        }
-        else{
-            return res.status(400).json({ msg: 'Properties Is Not Found', status: 0, response: 'error' });
-        }
-    }
-    catch (err) {
-        console.log(err);
-        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
-    }
-}
-
 module.exports.getbookedproperty = async (req, res) => {
     try {
         const userId = req.user._id;

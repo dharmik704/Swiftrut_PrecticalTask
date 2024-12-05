@@ -40,7 +40,7 @@ const propertySchema = mongoose.Schema({
     updateAt: {
 		type: String,
 		required: true,
-	},
+	}
 });
 
 const imgdata = multer.diskStorage({
@@ -55,6 +55,6 @@ const imgdata = multer.diskStorage({
 propertySchema.statics.uploadimage = multer({storage: imgdata}).single('image');
 propertySchema.statics.ipath = imgpath;
 
-const Property = mongoose.model("Properties", propertySchema);
+const Property = mongoose.model("Property", propertySchema);
 
 module.exports = Property;
