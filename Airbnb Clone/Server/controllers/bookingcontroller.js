@@ -7,9 +7,7 @@ module.exports.bookproperty = async (req, res) => {
         const property = await Property.findById(req.params.id);
 
         if(property){
-            if(property.ownerId.toString() === req.user._id){
-                return res.status(400).json({ msg: 'Not authorized to booking this property!!', status: 0, response: 'error' });
-            }
+            
             req.body.propertyId = property._id;
             req.body.userId = req.user._id;
             req.body.startDate = moment(req.body.startDate, "DD/MM/YYYY").format('ll');
@@ -72,18 +70,3 @@ module.exports.cancelebooking= async (req, res) => {
     }
 }
 
-module.exports.getcancelebooking = async (req, res) => {
-    try {
-        const booking = await Booking.find({userId: req.user._id, status: 'Canceled'}).populate('propertyId');
-        if(booking){
-            return res.status(200).json({ msg: 'Your canceled bookings', status: 1, response: 'success', CanceleBookings: booking });
-        }
-        else{
-            return res.status(400).json({ msg: 'Canceled bookings are not founds!!', status: 0, response: 'error' });
-        }
-    }
-    catch (err) {
-        console.log(err);
-        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
-    }
-}
