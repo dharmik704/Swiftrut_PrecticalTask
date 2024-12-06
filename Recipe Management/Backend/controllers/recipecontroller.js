@@ -118,3 +118,21 @@ module.exports.getrecipebycuisine = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.saverecipe = async (req, res) => {
+    try {
+        const recipedata = await Recipe.findById(req.params.id);
+        const saverecipe = recipedata.saved;
+        const updateimp = await Recipe.findByIdAndUpdate(req.params.id, {saved: !saverecipe});
+        if(updateimp){
+            return res.status(200).json({ msg: 'Racipe is successfully saved', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Racipe is not saved!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
