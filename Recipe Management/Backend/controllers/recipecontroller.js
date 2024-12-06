@@ -30,3 +30,19 @@ module.exports.createrecipe = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.getallrecipe = async (req, res) => {
+    try {
+        const allrecipe = await Recipe.find({userId: req.user._id}).sort({_id: -1});
+        if(allrecipe){
+            return res.status(200).json({ msg: 'Your all recipes', status: 1, response: 'success', AllRecipes: allrecipe });
+        }
+        else{
+            return res.status(400).json({ msg: 'Recipes are not founds!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
