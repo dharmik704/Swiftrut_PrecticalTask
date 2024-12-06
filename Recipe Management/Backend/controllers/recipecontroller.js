@@ -46,3 +46,40 @@ module.exports.getallrecipe = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.updaterecipe = async (req, res) => {
+    try {
+        if(req.file){
+            const recipedata = await Recipe.findById(req.params.id);
+            var imgpath = path.join(__dirname,'..',recipedata.image);
+            if(fs.existsSync(imgpath)){
+                fs.unlinkSync(imgpath); //delete image
+            }
+            req.body.image = Recipe.ipath + '/' + req.file.filename;
+            req.body.updateAt = moment().format('LLL');
+            const updaterecipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {new: true});
+            if(updaterecipe){
+                return res.status(200).json({ msg: 'Recipe updated successfully', status: 1, response: 'success', UpdatedRecipe: updaterecipe });
+            }
+            else{
+                return res.status(400).json({ msg: 'Recipe is not updated!!', status: 0, response: 'error' });
+            }
+        }
+        else{
+            const recipedata = await Recipe.findById(req.params.id);
+            req.body.image = recipedata.image;
+            req.body.updateAt = moment().format('LLL');
+            const updaterecipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {new: true});
+            if(updaterecipe){
+                return res.status(200).json({ msg: 'Recipe updated successfully', status: 1, response: 'success', UpdatedRecipe: updaterecipe });
+            }
+            else{
+                return res.status(400).json({ msg: 'Recipe is not updated!!', status: 0, response: 'error' });
+            }
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
