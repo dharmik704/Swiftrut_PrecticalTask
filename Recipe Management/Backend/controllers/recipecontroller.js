@@ -102,3 +102,19 @@ module.exports.removerecipe = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.getrecipebycuisine = async (req, res) => {
+    try {
+        const recipebycuisine = await Recipe.find({cuisine: req.params.cuisine}).sort({_id: -1});
+        if(recipebycuisine && recipebycuisine.length > 0){
+            return res.status(200).json({ msg: 'Your all recipes by cuisine', status: 1, response: 'success', Recipe_By_Cuisine: recipebycuisine });
+        }
+        else{
+            return res.status(400).json({ msg: 'Recipes are not founds by cuisine!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
