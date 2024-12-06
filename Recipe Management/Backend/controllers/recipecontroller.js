@@ -136,3 +136,19 @@ module.exports.saverecipe = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.getsaverecipe = async (req, res) => {
+    try {
+        const findsaveracipe = await Recipe.find({saved: true}).sort({_id: -1});
+        if(findsaveracipe){
+            return res.status(200).json({ msg: 'Your all saved recipes', status: 1, response: 'success', SaveRacipe: findsaveracipe });
+        }
+        else{
+            return res.status(400).json({ msg: 'No saved racipes!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
