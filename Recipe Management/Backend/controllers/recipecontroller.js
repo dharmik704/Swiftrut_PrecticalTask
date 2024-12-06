@@ -83,3 +83,22 @@ module.exports.updaterecipe = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.removerecipe = async (req, res) => {
+    try {
+        const findrecipe = await Recipe.findById(req.params.id);
+        var imgpath = path.join(__dirname, '..', findrecipe.image);
+        fs.unlinkSync(imgpath);
+        const rmvrecipe = await Recipe.findByIdAndDelete(req.params.id);
+        if(rmvrecipe){
+            return res.status(200).json({ msg: 'Recipe is deleted successfully', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Recipe is not deleted!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
