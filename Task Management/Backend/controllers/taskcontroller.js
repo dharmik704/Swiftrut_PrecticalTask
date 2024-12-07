@@ -91,3 +91,22 @@ module.exports.removetask = async (req, res) => {
     }
 }
 
+module.exports.updatetask = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const { title, desc } = req.body;
+        req.body.updateAt = moment().format('LLL');
+        const updatetask = await Task.findByIdAndUpdate(id, {title: title, desc: desc});
+        if(updatetask){
+            return res.status(200).json({ msg: 'Task updated successfully', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Task is not updated!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
