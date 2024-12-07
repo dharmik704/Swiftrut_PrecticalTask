@@ -48,3 +48,23 @@ module.exports.createtask = async (req, res) => {
     }
 }
 
+module.exports.getalltask = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const userdata = await User.findById(userId).populate({
+            path: 'tasks',
+            options: { sort : {createAt: -1 }},
+        });
+        if(userdata){
+            return res.status(200).json({ msg: 'Your All Tasks', status: 1, response: 'success', AllTasks: userdata.tasks });
+        }
+        else{
+            return res.status(400).json({ msg: 'Tasks are not founds!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
