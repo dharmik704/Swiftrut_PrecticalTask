@@ -68,3 +68,26 @@ module.exports.getalltask = async (req, res) => {
     }
 }
 
+module.exports.removetask = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user._id;
+        const rmvtask = await Task.findByIdAndDelete(id);
+        if(rmvtask){
+            await User.findByIdAndUpdate(userId, {
+                $pull: {
+                    tasks: id,
+                },
+            });
+            return res.status(200).json({ msg: 'Task is deleted successfully', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Task is not deleted!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
