@@ -11,7 +11,36 @@ module.exports.createtask = async (req, res) => {
         req.body.createAt = moment().format('LLL');
         req.body.updateAt = moment().format('LLL');
         const createtask = await Task.create(req.body);
-        
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+              // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+              user: "dharmikchhodvdiya@gmail.com",
+              pass: "wpeyeoaukdmcwhiv",
+            },
+        });
+        if(createtask){
+            await User.findByIdAndUpdate(userId, {
+                $push: {
+                    tasks: createtask._id,
+                },
+            });
+            if(info){
+                const info = await transporter.sendMail({
+                    from: 'dharmikchhodvdiya@gmail.com', // sender address
+                    to: req.user.email, // list of receivers
+                    subject: `The New Task Is Ready`, // Subject line
+                    text: "Hello world?", // plain text body
+                    html: `<p> This Email is Informed to your New Task is Successfully Created and you Take Some Actions on your Task. More Information is Showen on your Deskbord.</p>`, // html body
+                });
+            }
+            return res.status(200).json({ msg: 'Task added successfully', status: 1, response: 'success', YourTask: createtask });
+        }
+        else{
+            return res.status(400).json({ msg: 'Task is not added!!', status: 0, response: 'error' });
+        }
     }
     catch (err) {
         console.log(err);
