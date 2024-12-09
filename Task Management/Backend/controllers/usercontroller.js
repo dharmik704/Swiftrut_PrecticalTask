@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../config/jwt');
 const User = require('../models/user.model');
-const Property = require('../models/task.model');
 
 module.exports.signup = async (req, res) => {
     try{
