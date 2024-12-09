@@ -70,13 +70,12 @@ module.exports.getalltask = async (req, res) => {
 
 module.exports.removetask = async (req, res) => {
     try {
-        const { id } = req.params;
         const userId = req.user._id;
-        const rmvtask = await Task.findByIdAndDelete(id);
+        const rmvtask = await Task.findByIdAndDelete(req.params.id);
         if(rmvtask){
             await User.findByIdAndUpdate(userId, {
                 $pull: {
-                    tasks: id,
+                    tasks: req.params.id,
                 },
             });
             return res.status(200).json({ msg: 'Task is deleted successfully', status: 1, response: 'success' });
@@ -93,10 +92,8 @@ module.exports.removetask = async (req, res) => {
 
 module.exports.updatetask = async (req, res) => {
     try {
-        const {id} = req.params;
-        const { title, desc } = req.body;
         req.body.updateAt = moment().format('LLL');
-        const updatetask = await Task.findByIdAndUpdate(id, {title: title, desc: desc});
+        const updatetask = await Task.findByIdAndUpdate(req.params.id, req.body);
         if(updatetask){
             return res.status(200).json({ msg: 'Task updated successfully', status: 1, response: 'success' });
         }
@@ -112,8 +109,7 @@ module.exports.updatetask = async (req, res) => {
 
 module.exports.updateimptask = async (req, res) => {
     try {
-        const {id} = req.params;
-        const taskdata = await Task.findById(id);
+        const taskdata = await Task.findById(req.params.id);
         req.body.updateAt = moment().format('LLL');
         const imptask = taskdata.important;
         const updateimp = await Task.findByIdAndUpdate(id, {important: !imptask});
@@ -132,8 +128,7 @@ module.exports.updateimptask = async (req, res) => {
 
 module.exports.updatecmpltask = async (req, res) => {
     try {
-        const {id} = req.params;
-        const taskdata = await Task.findById(id);
+        const taskdata = await Task.findById(req.params.id);
         req.body.updateAt = moment().format('LLL');
         const complatetask = taskdata.complate;
         const updatecomplate = await Task.findByIdAndUpdate(id, {complate: !complatetask});
