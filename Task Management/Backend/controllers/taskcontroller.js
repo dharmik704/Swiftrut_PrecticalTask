@@ -171,3 +171,24 @@ module.exports.getimptask = async (req, res) => {
     }
 }
 
+module.exports.getcomplatetask = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const complatetask = await User.findById(userId).populate({
+            path: 'tasks',
+            match: { complate: true },
+            options: { sort : {createAt: -1 }},
+        });
+        if(complatetask){
+            return res.status(200).json({ msg: 'Your Complated Tasks', status: 1, response: 'success', ComplateTask: complatetask.tasks });
+        }
+        else{
+            return res.status(400).json({ msg: 'Tasks are not founds!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
