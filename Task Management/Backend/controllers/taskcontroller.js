@@ -150,3 +150,24 @@ module.exports.updatecmpltask = async (req, res) => {
     }
 }
 
+module.exports.getimptask = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const impotanttask = await User.findById(userId).populate({
+            path: 'tasks',
+            match: { important: true },
+            options: { sort : {createAt: -1 }},
+        });
+        if(impotanttask){
+            return res.status(200).json({ msg: 'Your Impotant Tasks', status: 1, response: 'success', ImportantTasks: impotanttask.tasks });
+        }
+        else{
+            return res.status(400).json({ msg: 'Tasks are not founds!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
