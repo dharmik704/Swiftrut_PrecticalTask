@@ -130,3 +130,23 @@ module.exports.updateimptask = async (req, res) => {
     }
 }
 
+module.exports.updatecmpltask = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const taskdata = await Task.findById(id);
+        req.body.updateAt = moment().format('LLL');
+        const complatetask = taskdata.complate;
+        const updatecomplate = await Task.findByIdAndUpdate(id, {complate: !complatetask});
+        if(updatecomplate){
+            return res.status(200).json({ msg: 'Task updated successfully', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Task is not updated!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
