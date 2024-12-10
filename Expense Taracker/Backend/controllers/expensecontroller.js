@@ -28,3 +28,19 @@ module.exports.createExpense = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.getallExpense = async (req, res) => {
+    try {
+        const allExpense = await Expense.find({userId: req.user._id}).sort({_id: -1});
+        if(allExpense){
+            return res.status(200).json({ msg: 'Your all Expense', status: 1, response: 'success', AllExpense: allExpense });
+        }
+        else{
+            return res.status(400).json({ msg: 'Expense is not founds!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
