@@ -141,3 +141,85 @@ module.exports.getTotaleExpensePerMonth = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.getCategoryWiseExpenses = async (req, res) => {
+    try {
+        const result = await Expense.aggregate([
+            {
+                $match: {
+                    userId: { $eq: new ObjectId(req.user._id) }  // Convert to ObjectId
+                }
+            },
+            {
+                $group: {
+                    _id: "$category",
+                    totalAmount: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: { totalAmount: -1 }
+            }
+        ]);
+
+        if(result){
+            return res.status(200).json({ msg: 'Your all CategoryWiseExpenses ', status: 1, response: 'success', CategoryWiseExpenses: result });
+        }
+        else{
+            return res.status(400).json({ msg: 'Expenses are not founds by categorywise!!', status: 0, response: 'error' });
+        }
+
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
+module.exports.uploadcsvfile = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ msg: 'No file uploaded!!', status: 0, response: 'error' });
+        }
+        const filePath = req.file.path;
+        const csvfileremove = (filePath) => {
+            fs.unlink(filePath, (err) => {
+                 if (err) {
+                    console.error(`Error deleting file: ${filePath}`, err);
+                } else {
+                    console.log(`File successfully deleted: ${filePath}`);
+                }
+            });
+        }
+
+        const expenseData = [];
+        csv()
+        .fromFile(req.file.path)
+        .then(async (rows)=>{
+            
+            for(var i = 0; i < rows.length; i++){
+                expenseData.push({
+                    amount: rows[i].amount,
+                    category: rows[i].category,
+                    payment_method: rows[i].payment_method,
+                    description: rows[i].description,
+                    date: moment(rows[i].date, "DD/MM/YYYY").format('ll'),
+                    createAt: moment().format('LLL'),
+                    updateAt: moment().format('LLL'),
+                    userId: req.user._id,
+                })
+            };
+            const csvdata = await Expense.insertMany(expenseData);
+            if(csvdata){
+                csvfileremove(filePath);
+                return res.status(200).send({ msg: 'CSV processed and file deleted successfully', status: 1, response: 'success', FileData: csvdata });
+            }
+            else{
+                return res.status(400).json({ msg: 'CSV file is not uploaded!!', status: 0, response: 'error' });
+            }
+        });
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
