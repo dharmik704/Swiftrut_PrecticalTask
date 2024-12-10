@@ -89,3 +89,55 @@ module.exports.removeExpense = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.getTotaleExpensePerMonth = async (req, res) => {
+    try {
+        // const userId = req.user._id;
+        const Expenses = await Expense.find({userId: req.user._id});
+        
+        if(Expenses){
+            const result = await Expense.aggregate([
+                {
+                    $match: {
+                        userId: { $eq: new ObjectId(req.user._id) }  // Convert to ObjectId
+                    }
+                },
+                {
+                    $addFields: {
+                        date: { $toDate: "$date" }  // This ensures the 'date' field is converted to a Date type
+                    }
+                },
+                {
+                    $project: {
+                        month: {$month: "$date"},
+                        year: {$year: "$date"},
+                        amount: 1
+                    }
+                },
+                {
+                    $group: {
+                        _id: { year: "$year", month: "$month" },
+                        totalExpenses: { $sum: "$amount" }
+                    }
+                },
+                {
+                    $sort: { "_id.year": 1, "_id.month": 1 }
+                }
+            ]);
+    
+            if(result && result.length > 0){
+                return res.status(200).json({ msg: 'Your all ExpensesParMonth ', status: 1, response: 'success', ExpensesParMonth: result });
+            }
+            else{
+                return res.status(400).json({ msg: 'Expenses are not founds per month!!', status: 0, response: 'error' });
+            }
+        }
+        else{
+            return res.status(400).json({ msg: 'data not found by userId', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
