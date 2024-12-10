@@ -73,3 +73,19 @@ module.exports.updateExpense = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.removeExpense = async (req, res) => {
+    try {
+        const rmvexpense = await Expense.findByIdAndDelete(req.params.id);
+        if(rmvexpense){
+            return res.status(200).json({ msg: 'Expense is removed successfully', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Expense is not removed!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
