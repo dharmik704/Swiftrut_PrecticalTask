@@ -44,3 +44,32 @@ module.exports.getallExpense = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.updateExpense = async (req, res) => {
+    try {
+        const expensedata = await Expense.findById(req.params.id);
+        const paymentmethode = ['Cash', 'Credit'];
+        const formattedDate = moment(req.body.date, "DD/MM/YYYY").format('ll');
+        req.body.updateAt = moment().format('LLL');
+        req.body.date = formattedDate;
+        if(!paymentmethode.includes(req.body.payment_method)){
+            return res.status(400).json({ msg: 'Payment mathode is not accepted!! you enter only: Cash or Credit', status: 0, response: 'error' });
+        }
+        if(expensedata){
+            const updateExpense = await Expense.findByIdAndUpdate(req.params.id, req.body, {new: true});
+            if(updateExpense){
+                return res.status(200).json({ msg: 'Expense is updated successfully', status: 1, response: 'success', UpdatedExpense: updateExpense });
+            }
+            else{
+                return res.status(400).json({ msg: 'Expense is not updated!!', status: 0, response: 'error' });
+            }
+        }
+        else{
+            return res.status(400).json({ msg: 'Expense is not found!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
