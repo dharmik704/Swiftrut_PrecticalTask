@@ -50,7 +50,7 @@ module.exports.updateExpense = async (req, res) => {
         const expensedata = await Expense.findById(req.params.id);
         const paymentmethode = ['Cash', 'Credit'];
         req.body.updateAt = moment().format('LLL');
-        req.body.date = momenttime.tz(req.body.date, "DD/MM/YYYY", "India Standard Time");;
+        req.body.date = momenttime.tz(req.body.date, "DD/MM/YYYY", "India Standard Time");
         if(!paymentmethode.includes(req.body.payment_method)){
             return res.status(400).json({ msg: 'Payment mathode is not accepted!! you enter only: Cash or Credit', status: 0, response: 'error' });
         }
@@ -201,7 +201,7 @@ module.exports.uploadcsvfile = async (req, res) => {
                     category: rows[i].category,
                     payment_method: rows[i].payment_method,
                     description: rows[i].description,
-                    date: moment(rows[i].date, "DD/MM/YYYY").format('ll'),
+                    date: momenttime.tz(rows[i].date, "DD/MM/YYYY", "India Standard Time");
                     createAt: moment().format('LLL'),
                     updateAt: moment().format('LLL'),
                     userId: req.user._id,
