@@ -11,5 +11,6 @@ routes.delete('/removeExpense/:id', expensectrl.removeExpense);
 routes.get('/getTotaleExpensePerMonth', expensectrl.getTotaleExpensePerMonth);
 routes.get('/getCategoryWiseExpenses', expensectrl.getCategoryWiseExpenses);
 routes.post('/uploadcsvfile', Expense.uploadfile, expensectrl.uploadcsvfile);
+routes.get('/expenseBydate', expensectrl.expenseBydate);
 
 module.exports = routes;

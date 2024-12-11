@@ -1,5 +1,6 @@
 const Expense = require('../models/expense.model');
 const moment = require('moment');
+const momenttime = require('moment-timezone');
 const { ObjectId } = require('mongodb');
 const fs = require('fs');
 const csv = require('csvtojson');
@@ -7,10 +8,9 @@ const csv = require('csvtojson');
 module.exports.createExpense = async (req, res) => {
     try {
         const paymentmethode = ['Cash', 'Credit'];
-        const formattedDate = moment(req.body.date, "DD/MM/YYYY").format('ll');
         req.body.createAt = moment().format('LLL');
         req.body.updateAt = moment().format('LLL');
-        req.body.date = formattedDate;
+        req.body.date = momenttime.tz(req.body.date, "DD/MM/YYYY", "India Standard Time");
         req.body.userId = req.user._id;
         if(!paymentmethode.includes(req.body.payment_method)){
             return res.status(400).json({ msg: 'Payment mathode is not accepted!! you enter only: Cash or Credit', status: 0, response: 'error' });
@@ -49,9 +49,8 @@ module.exports.updateExpense = async (req, res) => {
     try {
         const expensedata = await Expense.findById(req.params.id);
         const paymentmethode = ['Cash', 'Credit'];
-        const formattedDate = moment(req.body.date, "DD/MM/YYYY").format('ll');
         req.body.updateAt = moment().format('LLL');
-        req.body.date = formattedDate;
+        req.body.date = momenttime.tz(req.body.date, "DD/MM/YYYY", "India Standard Time");;
         if(!paymentmethode.includes(req.body.payment_method)){
             return res.status(400).json({ msg: 'Payment mathode is not accepted!! you enter only: Cash or Credit', status: 0, response: 'error' });
         }
