@@ -35,3 +35,26 @@ module.exports.getallbooks = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.updatbook = async (req, res) => {
+    try {
+        const bookdata = await Book.findById(req.params.id);
+        if(bookdata){
+            req.body.updateAt = moment().format('LLL');
+            const updatebook = await Book.findByIdAndUpdate(req.params.id, req.body, {new: true});
+            if(updatebook){
+                return res.status(200).json({ msg: 'Book is updated successfully', status: 1, response: 'success', UpdatedBook: updatebook });
+            }
+            else{
+                return res.status(400).json({ msg: 'Book is not updated!!', status: 0, response: 'error' });
+            }
+        }
+        else{
+            return res.status(400).json({ msg: 'Book is not found!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
