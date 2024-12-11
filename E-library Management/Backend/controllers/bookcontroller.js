@@ -89,3 +89,18 @@ module.exports.availablebooks = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.allborrowbooks = async (req, res) => {
+    try {
+        const borrowbook = await Book.find({available: false}).sort({_id: -1});
+        if(!borrowbook || borrowbook.length === 0){
+            return res.status(400).json({ msg: 'No Book is borrow!!', status: 0, response: 'error' });
+        }
+        
+        return res.status(200).json({ msg: 'Your all borrow books', status: 1, response: 'success', BorrowedBooks: borrowbook });
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
