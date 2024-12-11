@@ -222,3 +222,25 @@ module.exports.uploadcsvfile = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.expenseBydate = async (req, res) => {
+    try {
+        req.body.startDate = momenttime.tz(req.body.startDate, "DD/MM/YYYY", "India Standard Time").startOf('day').toDate();
+        req.body.endDate = momenttime.tz(req.body.endDate, "DD/MM/YYYY", "India Standard Time").endOf('day').toDate();
+
+        const start = req.body.startDate;
+        const end = req.body.endDate;
+
+        const allExpense = await Expense.find({userId: req.user._id, date: { $gte: start, $lte: end } }).sort({date: 1});
+        if(allExpense){
+            return res.status(200).json({ msg: 'Your all Expense by Date', status: 1, response: 'success', AllExpense: allExpense });
+        }
+        else{
+            return res.status(400).json({ msg: 'Expense is not founds from this date!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
