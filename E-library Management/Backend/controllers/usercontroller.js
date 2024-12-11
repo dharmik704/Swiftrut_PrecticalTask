@@ -109,7 +109,7 @@ module.exports.availablebooks = async (req, res) => {
     }
 }
 
-module.exports.boreowbook = async (req, res) => {
+module.exports.borrowbook = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
         if(!book || !book.available){

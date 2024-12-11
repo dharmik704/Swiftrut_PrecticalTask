@@ -9,7 +9,7 @@ routes.post('/login', userctrl.login);
 routes.post('/logout', userctrl.logout);
 
 routes.get('/availablebooks', jwtAuthMiddleware, userctrl.availablebooks);
-routes.post('/boreowbook/:id', jwtAuthMiddleware, userctrl.boreowbook);
+routes.post('/borrowbook/:id', jwtAuthMiddleware, userctrl.borrowbook);
 routes.post('/returnboreowbook/:id', jwtAuthMiddleware, userctrl.returnboreowbook);
 routes.get('/allborrowbooks', jwtAuthMiddleware, userctrl.allborrowbooks);
 

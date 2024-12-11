@@ -74,3 +74,18 @@ module.exports.removebook = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.availablebooks = async (req, res) => {
+    try {
+        const availablebook = await Book.find({available: true}).sort({_id: -1});
+        if(!availablebook || availablebook.length === 0){
+            return res.status(400).json({ msg: 'Book is unavailable!!', status: 0, response: 'error' });
+        }
+        
+        return res.status(200).json({ msg: 'Your all available books', status: 1, response: 'success', AvailableBooks: availablebook });
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
