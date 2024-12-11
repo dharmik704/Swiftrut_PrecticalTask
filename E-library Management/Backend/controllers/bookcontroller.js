@@ -58,3 +58,19 @@ module.exports.updatbook = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.removebook = async (req, res) => {
+    try {
+        const rmvbook = await Book.findByIdAndDelete(req.params.id);
+        if(rmvbook){
+            return res.status(200).json({ msg: 'Book is removed successfully', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Book is not removed!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
