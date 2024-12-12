@@ -86,3 +86,22 @@ odule.exports.updatepost = async (req, res) => {
     }
 }
 
+module.exports.removepost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const findpost = await Post.findById(id);
+        var imgpath = path.join(__dirname, '..', findpost.image);
+        fs.unlinkSync(imgpath);
+        const rmvpost = await Post.findByIdAndDelete(id);
+        if(rmvpost){
+            return res.status(200).json({ msg: 'Post is deleted successfully', status: 1, response: 'success' });
+        }
+        else{
+            return res.status(400).json({ msg: 'Post is not deleted!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
