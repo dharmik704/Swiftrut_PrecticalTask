@@ -9,10 +9,7 @@ module.exports.createpost = async (req, res) => {
         var img = ""
         if(req.file){
             const userId = req.user._id;
-            img = Post.ipath + '/' + req.file.filename;
-            req.body.createAt = moment().format('LLL');
-            req.body.updateAt = moment().format('LLL');
-            req.body.image = img;
+            
             req.body.userId = userId;
             const createpost = await Post.create(req.body);
             if(createpost){
