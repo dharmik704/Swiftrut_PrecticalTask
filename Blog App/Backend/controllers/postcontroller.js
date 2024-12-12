@@ -48,3 +48,41 @@ module.exports.getallpost = async (req, res) => {
     }
 }
 
+odule.exports.updatepost = async (req, res) => {
+    try {
+        if(req.file){
+            const postdata = await Post.findById(req.params.id);
+            var imgpath = path.join(__dirname,'..',postdata.image);
+            if(fs.existsSync(imgpath)){
+                fs.unlinkSync(imgpath);
+            }
+            req.body.image = Post.ipath + '/' + req.file.filename;
+            req.body.updateAt = moment().format('LLL');
+            const updatepost = await Post.findByIdAndUpdate(req.params.id, req.body, {new: true});
+            if(updatepost){
+                return res.status(200).json({ msg: 'Post updated successfully', status: 1, response: 'success', UpdatedPost: updatepost });
+            }
+            else{
+                return res.status(400).json({ msg: 'Post is not updated!!', status: 0, response: 'error' });
+            }
+        }
+        else{
+            const postdata = await Post.findById(req.params.id);
+            req.body.image = postdata.image;
+            req.body.updateAt = moment().format('LLL');
+            const updatepost = await Post.findByIdAndUpdate(req.params.id, req.body, {new: true});
+            if(updatepost){
+                return res.status(200).json({ msg: 'Post updated successfully', status: 1, response: 'success', UpdatedPost: updatepost });
+            }
+            else{
+                return res.status(400).json({ msg: 'Post is not updated!!', status: 0, response: 'error' });
+            }
+        }
+
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
