@@ -32,3 +32,19 @@ module.exports.createpost = async (req, res) => {
     }
 }
 
+module.exports.getallpost = async (req, res) => {
+    try {
+        const allpost = await Post.find({userId: req.user._id}).sort({_id: -1});
+        if(allpost){
+            return res.status(200).json({ msg: 'Your all posts', status: 1, response: 'success', AllPosts: allpost   });
+        }
+        else{
+            return res.status(400).json({ msg: 'Posts are not founds!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
