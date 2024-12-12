@@ -98,7 +98,7 @@ module.exports.logout = async (req, res) => {
 
 module.exports.getenrollmentcourse = async (req, res) => {
     try {
-        const enrollmentcourse = await Course.find({enrolledStudents: req.user._id}).sort({_id: -1});
+        const enrollmentcourse = await Course.find({enrolledStudents: req.user._id},{title: 1,description: 1,startDate:1,endDate:1,content:1}).sort({_id: -1});
         if(enrollmentcourse){
             return res.status(200).json({ msg: 'Your enrolle course', status: 1, response: 'success', EnrolleCourses: enrollmentcourse });
         }

@@ -5,6 +5,7 @@ const Course = require('../models/course.model');
 const moment = require('moment');
 const Submission = require('../models/submition.model');
 const mongoose = require('mongoose');
+const Student = require('../models/student.model');
 
 module.exports.signup = async (req, res) => {
     try{
@@ -97,6 +98,22 @@ module.exports.logout = async (req, res) => {
     }
 }
 
+module.exports.getenrolledstudent = async (req, res) => {
+    try {
+        const assignedcourse = await Course.find({assignedTeacher: req.user._id},{enrolledStudents: 1}).populate("enrolledStudents", "username email role").sort({_id: -1});
+        if(assignedcourse){
+            return res.status(200).json({ msg: 'Your all assigned courses', status: 1, response: 'success', AssignedCourses: assignedcourse });
+        }
+        else{
+            return res.status(400).json({ msg: 'assigned courses are not founds!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
+
 module.exports.getassignedcourses = async (req, res) => {
     try {
         const assignedcourse = await Course.find({assignedTeacher: req.user._id}).sort({_id: -1});
@@ -142,15 +159,12 @@ module.exports.updatecontent = async (req, res) => {
 
 module.exports.submissiongrade = async (req, res) => {
     try {
-        const { studentId } = req.body;
-        const submission = await Submission.findOne({course: req.params.id, student: studentId });
-        if (!studentId || !mongoose.Types.ObjectId.isValid(studentId)) {
-            return res.status(400).json({
-                msg: 'Student ID must be a valid ObjectId',
-                status: 0,
-                response: 'error'
-            });
+        const student = await Student.findOne({username: req.body.username, email: req.body.email});
+        if(!student){
+            return res.status(400).json({ msg: 'Student is not found!!', status: 0, response: 'error' });
         }
+
+        const submission = await Submission.findOne({course: req.params.id, student: student._id });
         if(!submission){
             return res.status(400).json({ msg: 'Submission is not found!!', status: 0, response: 'error' });
         }

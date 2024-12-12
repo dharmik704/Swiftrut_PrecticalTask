@@ -10,6 +10,7 @@ routes.post('/logout', teacherctrl.logout);
 
 // routes.use('/course', jwtAuthMiddleware, require('./course'));
 
+routes.get('/getenrolledstudent', jwtAuthMiddleware, teacherctrl.getenrolledstudent);
 routes.get('/getassignedcourses', jwtAuthMiddleware, teacherctrl.getassignedcourses);
 routes.post('/updatecontent/:id', jwtAuthMiddleware, teacherctrl.updatecontent);
 routes.post('/submissiongrade/:id', jwtAuthMiddleware, teacherctrl.submissiongrade);

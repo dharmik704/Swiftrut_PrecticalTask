@@ -97,7 +97,7 @@ module.exports.logout = async (req, res) => {
 
 module.exports.getallteachers = async (req, res) => {
     try {
-        const allteacher = await Teacher.find().sort({_id: -1});
+        const allteacher = await Teacher.find({},{username: 1, email: 1, role: 1}).sort({_id: -1});
         if(allteacher){
             return res.status(200).json({ msg: 'Your all Teachers', status: 1, response: 'success', AllReachers: allteacher });
         }
@@ -113,7 +113,7 @@ module.exports.getallteachers = async (req, res) => {
 
 module.exports.getallstudents = async (req, res) => {
     try {
-        const allstudent = await Student.find().sort({_id: -1});
+        const allstudent = await Student.find({},{username: 1, email: 1, role: 1}).sort({_id: -1});
         if(allstudent){
             return res.status(200).json({ msg: 'Your all Students', status: 1, response: 'success', AllStudent: allstudent });
         }
