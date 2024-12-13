@@ -64,3 +64,24 @@ module.exports.giveExam = async (req, res) => {
         return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
     }
 }
+
+module.exports.getexamresult = async (req, res) => {
+    try {
+        const quiz = await Quiz.findById(req.params.id);
+        if(!quiz){
+            return res.status(400).json({ msg: 'Quiz not found!!', status: 0, response: 'error' });
+        }
+        const exam = await Exam.findOne({quizId: req.params.id,userId: req.user._id}).select('score result');
+
+        if(exam){
+            return res.status(200).json({ msg: 'Your exam result', status: 1, response: 'success', ExamResult: exam });
+        }
+        else{
+            return res.status(400).json({ msg: 'Exam result not found!!', status: 0, response: 'error' });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ msg: 'Somthing went wrong', status: 0, response: 'error' });
+    }
+}
