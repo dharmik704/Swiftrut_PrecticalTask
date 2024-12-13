@@ -35,7 +35,14 @@ module.exports.giveExam = async (req, res) => {
             }
         });
 
-        
+        const useraaswers = req.body.answers.map(answer => parseInt(answer, 10));
+
+        if(score < 10){
+            req.body.result = 'Fail'
+        }
+        else{
+            req.body.result = 'Pass'
+        }
 
         const exam = await new Exam({
             answers: useraaswers,
