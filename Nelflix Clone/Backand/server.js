@@ -12,6 +12,10 @@ const port = ENV_VARS.PORT;
 
 const mongoose = require('mongoose');
 
+const cors = require('cors');
+
+app.use(cors());
+
 app.use(express.json());
 
 const cp = require('cookie-parser');
