@@ -10,6 +10,8 @@ const db = require('./Config/db');
 
 const port = ENV_VARS.PORT;
 
+const mongoose = require('mongoose');
+
 const cors = require('cors');
 
 app.use(cors());
