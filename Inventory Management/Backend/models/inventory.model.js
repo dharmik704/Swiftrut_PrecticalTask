@@ -55,8 +55,8 @@ const filedata = multer.diskStorage({
 	}
 });
 
-expenseSchema.statics.uploadfile = multer({storage: filedata}).single('file');
-expenseSchema.statics.filepath = filepath;
+inventorySchema.statics.uploadfile = multer({storage: filedata}).single('file');
+inventorySchema.statics.filepath = filepath;
 
 const Inventory = mongoose.model("Inventory", inventorySchema);
 
