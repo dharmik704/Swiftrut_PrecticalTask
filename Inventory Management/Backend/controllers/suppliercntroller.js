@@ -5,10 +5,7 @@ module.exports.addsupplier = async (req, res) => {
     try {
         const inventory = await Inventory.findById(req.params.id);
         if(inventory){
-            req.body.role = "Supplier";
-            req.body.userId = req.user._id;
-            req.body.inventoryId = req.params.id;
-            const validemail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
             if(!validemail.test(req.body.email)){
                 return res.status(400).json({ msg: 'Invalid email', status: 0, response: 'error' });
             }
