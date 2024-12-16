@@ -54,7 +54,18 @@ module.exports.getsupplier = async (req, res) => {
 module.exports.updatesupplier = async (req, res) => {
     try {
         const supplier = await Supplier.findById(req.params.id);
-        
+        if(supplier){
+            const updatesupplier = await Supplier.findByIdAndUpdate(req.params.id, req.body, {new: true});
+            if(updatesupplier){
+                return res.status(200).json({ msg: 'Supplier detailes is updated successfully', status: 1, response: 'success', UpdatedSupplier: updatesupplier });
+            }
+            else{
+                return res.status(400).json({ msg: 'Supplier detailes is not updated!!', status: 0, response: 'error' });
+            }
+        }
+        else{
+            return res.status(400).json({ msg: 'Supplier is not found!!', status: 0, response: 'error' });
+        }
     }
     catch (err) {
         console.log(err);
