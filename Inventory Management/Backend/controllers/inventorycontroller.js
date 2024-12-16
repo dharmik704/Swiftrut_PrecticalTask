@@ -26,15 +26,7 @@ module.exports.createinventory = async (req, res) => {
 module.exports.getallinventory = async (req, res) => {
     try {
         const allinventory = await Inventory.find({userId: req.user._id}).sort({_id: -1});
-        if(allinventory.length === 0){
-            return res.status(400).json({ msg: 'No inventory found!!', status: 0, response: 'error' });
-        }
-        if(allinventory){
-            return res.status(200).json({ msg: 'Your all Inventory', status: 1, response: 'success', AllInventory: allinventory });
-        }
-        else{
-            return res.status(400).json({ msg: 'Inventory is not founds!!', status: 0, response: 'error' });
-        }
+        
     }
     catch (err) {
         console.log(err);
