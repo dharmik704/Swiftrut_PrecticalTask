@@ -51,11 +51,7 @@ module.exports.getyourprojects = async (req, res) => {
 
 module.exports.getallpendingprojects = async (req, res) => {
     try {
-        const projects = await Project.find({userId: req.user._id, status: 'pending'}).sort({_id: -1});
-        if(projects.length === 0){
-            return res.status(400).json({ msg: 'Project are not found!!', status: 0, response: 'error' });
-        }
-        return res.status(200).json({ msg: 'Your Pending Projects', status: 1, response: 'success', PendingProjects: projects });
+        
     }
     catch (err) {
         console.log(err);
