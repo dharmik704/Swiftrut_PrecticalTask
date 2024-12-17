@@ -76,7 +76,17 @@ module.exports.markaspaid = async (req, res) => {
         // Mock payment gateway processing
         const isPaymentSuccessful = true; // Simulate success (can be randomized for testing)
 
-       
+        if(isPaymentSuccessful){
+            payment.status = 'Paid';
+            payment.paymentDate = moment().format('LLL');
+            await payment.save();
+            return res.status(200).json({ msg: 'Payment successfully', status: 1, response: 'success', Details: payment });
+        }
+        else{
+            payment.status = 'Failed';
+            await payment.save();
+            return res.status(200).json({ msg: 'Payment failed!!', status: 0, response: 'error' });
+        }
     }
     catch (err) {
         console.log(err);
