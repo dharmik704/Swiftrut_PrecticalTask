@@ -51,7 +51,11 @@ module.exports.getyourprojects = async (req, res) => {
 
 module.exports.getallpendingprojects = async (req, res) => {
     try {
-        
+        const projects = await Project.find({userId: req.user._id, status: 'pending'}).sort({_id: -1});
+        if(projects.length === 0){
+            return res.status(400).json({ msg: 'Project are not found!!', status: 0, response: 'error' });
+        }
+        return res.status(200).json({ msg: 'Your Pending Projects', status: 1, response: 'success', PendingProjects: projects });
     }
     catch (err) {
         console.log(err);
@@ -79,15 +83,7 @@ module.exports.updateproject = async (req, res) => {
     try {
         const project = await Project.findById(req.params.id); 
         if(project){
-            req.body.updateAt = moment().format('LLL');
-            req.body.status = 'completed';
-            const updateproject = await Project.findByIdAndUpdate(req.params.id, req.body, {new: true});
-            if(updateproject){
-                return res.status(200).json({ msg: 'Project updated successfully', status: 1, response: 'success', UpdatedProject: updateproject });
-                }
-            else{
-                return res.status(400).json({ msg: 'Project is not updated!!', status: 0, response: 'error' });
-            }
+            
         }
         else{
             return res.status(400).json({ msg: 'Project not found!!', status: 0, response: 'error' });
