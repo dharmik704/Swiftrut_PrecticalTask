@@ -107,7 +107,13 @@ module.exports.removeproject = async (req, res) => {
     try {
         const project = await Project.findById(req.params.id);
         if(project){
-            
+            const rmvproject = await Project.findByIdAndDelete(req.params.id);
+            if(rmvproject){
+                return res.status(200).json({ msg: 'Project is deleted successfully', status: 1, response: 'success' });
+            }
+            else{
+                return res.status(400).json({ msg: 'Project is not deleted!!', status: 0, response: 'error' });
+            }
         }
         else{
             return res.status(400).json({ msg: 'Project not found!!', status: 0, response: 'error' });
