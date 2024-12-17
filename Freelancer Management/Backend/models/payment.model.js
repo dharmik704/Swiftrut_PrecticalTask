@@ -14,7 +14,23 @@ const paymentSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	
+	status: {
+		type: String,
+		default: "Pending",
+		// enum: ["Pending", "Paid", "Failed"],
+	},
+	paymentDate: {
+		type: String,
+	},
+	createAt: {
+		type: String,
+		required: true,
+	},
+	userId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
+        required: true,
+	}
 });
 
 const Payment = mongoose.model("Payment", paymentSchema);
