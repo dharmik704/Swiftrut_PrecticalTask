@@ -34,14 +34,7 @@ const BookSchema = mongoose.Schema({
 		type: String,
 		default: null,
 	},
-	createAt: {
-		type: String,
-		required: true,
-	},
-    updateAt: {
-		type: String,
-		required: true,
-	}
+	
 });
 
 const Book = mongoose.model("Book", BookSchema);

@@ -23,7 +23,12 @@ module.exports.createbook = async (req, res) => {
 module.exports.getallbooks = async (req, res) => {
     try {
         const allbooks = await Book.find().sort({_id: -1});
-        
+        if(allbooks){
+            return res.status(200).json({ msg: 'Your all Books', status: 1, response: 'success', AllBooks: allbooks });
+        }
+        else{
+            return res.status(400).json({ msg: 'Books are not founds!!', status: 0, response: 'error' });
+        }
     }
     catch (err) {
         console.log(err);
