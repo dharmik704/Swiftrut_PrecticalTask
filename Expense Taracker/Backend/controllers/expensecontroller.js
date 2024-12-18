@@ -201,7 +201,7 @@ module.exports.uploadcsvfile = async (req, res) => {
                     category: rows[i].category,
                     payment_method: rows[i].payment_method,
                     description: rows[i].description,
-                    date: momenttime.tz(rows[i].date, "DD/MM/YYYY", "India Standard Time");
+                    date: momenttime.tz(rows[i].date, "DD/MM/YYYY", "India Standard Time"),
                     createAt: moment().format('LLL'),
                     updateAt: moment().format('LLL'),
                     userId: req.user._id,
