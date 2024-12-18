@@ -91,7 +91,6 @@ module.exports.removeExpense = async (req, res) => {
 
 module.exports.getTotaleExpensePerMonth = async (req, res) => {
     try {
-        // const userId = req.user._id;
         const Expenses = await Expense.find({userId: req.user._id});
         
         if(Expenses){
