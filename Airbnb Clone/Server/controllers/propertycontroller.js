@@ -10,8 +10,7 @@ module.exports.addproprties = async (req, res) => {
             img = Property.ipath + '/' + req.file.filename;
             req.body.createAt = moment().format('LLL');
             req.body.updateAt = moment().format('LLL');
-            req.body.image = img;
-            req.body.ownerId = req.user._id;
+            
             const createproperty = await Property.create(req.body);
             if(createproperty){
                 return res.status(200).json({ msg: 'Property created successfully', status: 1, response: 'success', AddProperty: createproperty });
@@ -70,9 +69,7 @@ module.exports.updateproperty = async (req, res) => {
         if(req.file){
             const property = await Property.findById(req.params.id);
 
-            if(property.ownerId.toString() !== req.user._id){
-                return res.status(400).json({ msg: 'Not authorized to update this property!!', status: 0, response: 'error' });
-            }
+            
 
             var imgpath = path.join(__dirname,'..',property.image);
             if(fs.existsSync(imgpath)){
