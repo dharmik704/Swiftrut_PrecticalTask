@@ -115,7 +115,18 @@ module.exports.updateproperty = async (req, res) => {
 module.exports.removeproperty = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id);
-        
+        var imgpath = path.join(__dirname, '..', property.image);
+        if(property){
+            if(property.ownerId.toString() !== req.user._id){
+                return res.status(400).json({ msg: 'Not authorized to delete this property!!', status: 0, response: 'error' });
+            }
+            else{
+                fs.unlinkSync(imgpath);
+            }
+        }
+        else{
+            return res.status(400).json({ msg: 'Property is not found!!', status: 0, response: 'error' });
+        }
 
         const rmvproperty = await Property.findByIdAndDelete(req.params.id);
         if(rmvproperty){

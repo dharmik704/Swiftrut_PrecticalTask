@@ -10,11 +10,7 @@ module.exports.bookproperty = async (req, res) => {
             if(property.ownerId.toString() === req.user._id){
                 return res.status(400).json({ msg: 'Not authorized to booking this property!!', status: 0, response: 'error' });
             }
-            req.body.propertyId = property._id;
-            req.body.userId = req.user._id;
-            req.body.startDate = moment(req.body.startDate, "DD/MM/YYYY").format('ll');
-            req.body.endDate = moment(req.body.endDate, "DD/MM/YYYY").format('ll');
-            req.body.status = 'Confirmed';
+            
             const booking = await Booking.create(req.body);
             if(booking){
                 return res.status(200).json({ msg: 'Property is successfully bokked', status: 1, response: 'success', Booked: booking });
