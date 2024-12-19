@@ -69,7 +69,9 @@ module.exports.updateproperty = async (req, res) => {
         if(req.file){
             const property = await Property.findById(req.params.id);
 
-            
+            if(property.ownerId.toString() !== req.user._id){
+                return res.status(400).json({ msg: 'Not authorized to update this property!!', status: 0, response: 'error' });
+            }
 
             var imgpath = path.join(__dirname,'..',property.image);
             if(fs.existsSync(imgpath)){
