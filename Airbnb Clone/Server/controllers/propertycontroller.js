@@ -10,7 +10,8 @@ module.exports.addproprties = async (req, res) => {
             img = Property.ipath + '/' + req.file.filename;
             req.body.createAt = moment().format('LLL');
             req.body.updateAt = moment().format('LLL');
-            
+            req.body.image = img;
+            req.body.ownerId = req.user._id;
             const createproperty = await Property.create(req.body);
             if(createproperty){
                 return res.status(200).json({ msg: 'Property created successfully', status: 1, response: 'success', AddProperty: createproperty });
@@ -114,18 +115,7 @@ module.exports.updateproperty = async (req, res) => {
 module.exports.removeproperty = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id);
-        var imgpath = path.join(__dirname, '..', property.image);
-        if(property){
-            if(property.ownerId.toString() !== req.user._id){
-                return res.status(400).json({ msg: 'Not authorized to delete this property!!', status: 0, response: 'error' });
-            }
-            else{
-                fs.unlinkSync(imgpath);
-            }
-        }
-        else{
-            return res.status(400).json({ msg: 'Property is not found!!', status: 0, response: 'error' });
-        }
+        
 
         const rmvproperty = await Property.findByIdAndDelete(req.params.id);
         if(rmvproperty){
